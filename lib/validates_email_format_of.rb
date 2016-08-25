@@ -13,7 +13,7 @@ module ValidatesEmailFormatOf
 
   def self.validate_email_domain(email)
     domain = email.to_s.downcase.match(/\@(.+)/)[1]
-    Resolv::DNS.open do |dns|
+    Resolv::DNS.open(nameserver: ['8.8.8.8', '8.8.4.4']) do |dns|
       @mx = dns.getresources(domain, Resolv::DNS::Resource::IN::MX) + dns.getresources(domain, Resolv::DNS::Resource::IN::A)
     end
     @mx.size > 0 ? true : false
